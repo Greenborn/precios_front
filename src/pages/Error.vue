@@ -1,6 +1,5 @@
 <template>
-  <div class="row">
-  </div>
+    ERROR!!
 </template>
 
 <script setup>
