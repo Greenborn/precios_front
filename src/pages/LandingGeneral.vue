@@ -19,12 +19,14 @@
     </div>
   </div>
 
-  <BusquedaYCarga />
-
+  <div class="container">
+    <BusquedaYCarga />
+  </div>
+  
 </template>
 
 <script setup>
-import BusquedaYCargafrom from "../components/publico/BusquedayCarga.vue";
+import BusquedaYCarga from "../components/publico/BusquedayCarga.vue";
 </script>
 
 <style scoped>
