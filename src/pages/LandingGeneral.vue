@@ -1,37 +1,31 @@
 <template>
-
-  <div class="row ">
-  
-    <div class="row">
-      <div class="col text-center p-5">
-        <h1>Landing</h1>
-      </div>
-    </div>
-
-    <div class="row justify-content-center align-items-center">
-      <div class="col-12 col-md-6 col-lg-3">
-      </div>
-    </div>
-  
-    <div class="row mt-5 justify-content-center align-items-center">
-      <div class="col-auto">
-  
-        
-        <div class="row justify-content-center mb-3">
-          <div class="col-auto">
-            <a href="#/admin/login"><Button label="Login" /></a>
-          </div>
+  <div class="row">
+    <div class="col">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand p-2" href="#">
+          <img src="ruta_del_logo.png" alt="Buscador de Precios de Tandil" width="30" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto p-3">
+            <li class="nav-item">
+              <!--<a href="#/admin/login"><Button label="Iniciar Sesión" /></a>-->
+            </li>
+          </ul>
         </div>
-        
-      </div>
+      </nav>
     </div>
-    
-    
   </div>
-  </template>
-  
-  <script setup>
-  </script>
-  
-  <style scoped>
-  </style>
+
+  <BusquedaYCarga />
+
+</template>
+
+<script setup>
+import BusquedaYCargafrom from "../components/publico/BusquedayCarga.vue";
+</script>
+
+<style scoped>
+</style>
