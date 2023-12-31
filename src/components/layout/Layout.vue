@@ -13,16 +13,11 @@
       <router-view></router-view>
     </div>
   </div>
-  <Dialog :header="storeApp.modal_generico.titulo" v-model:visible="storeApp.modal_generico.activo" >
-    <component :is="storeApp.modal_generico.componente" :parametros="storeApp.modal_generico.parametros"></component>
-  </Dialog>
-  <Spinner :loading="storeApp.loading"></Spinner>
 </template>
 
 <script setup>
 import AppTopbar from './AppTopbar.vue'
 import AppMenu   from './AppMenu.vue'
-import Spinner   from './Spinner.vue'
 
 import { AppStore } from "../../stores/app";
 

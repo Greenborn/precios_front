@@ -4,6 +4,10 @@ import "primevue/resources/primevue.min.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap"
+import * as bootstrap from 'bootstrap'
+
 import "./assets/styles/layout.scss";
 
 import { createApp, reactive } from "vue";

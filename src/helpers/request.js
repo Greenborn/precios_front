@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { getToken } from '../utils/auth'
 
-const create = function( url ){
+const create = function( url,  with_credentials=true){
   const service = axios.create({
     baseURL: url, // url = base url + request url
-    withCredentials: true, // send cookies when cross-domain requests
-    timeout: 10000 // request timeout
+    withCredentials: with_credentials, // send cookies when cross-domain requests
+    timeout: 30000 // request timeout
   })
   
   // request interceptor
@@ -52,10 +52,9 @@ const create = function( url ){
   
     },
     error => {
-  
       console.log('err' + error) // for debug
-  
-      return Promise.reject(error)
+      const res = { error: true, msg: error }
+      return res
     }
   )
   return service

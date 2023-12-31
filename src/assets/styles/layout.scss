@@ -1,8 +1,10 @@
-@import 'bootstrap/dist/css/bootstrap.css';
-@import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 @import "./_variables";
 @import "./sass/_layout";
 @import "./_overrides";
+
+html{
+  font-size: 1rem;
+}
 
 .p-toast.p-toast-top-right {
   z-index: 1000;
@@ -33,4 +35,31 @@ $dark_gray: #889aa4;
 .img-responsive{
   width: 100%;
   height: auto;
+}
+
+#app{
+  width: 100vw;
+
+  --background: none;
+  background-image: url('public/images/bg1.png');
+  -webkit-background-size: repeat;
+  -moz-background-size: repeat;
+  background-size: repeat;
+  background-repeat: repeat;
+
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.nav-item {
+  a {
+    color:#cfcfcf;
+    font-weight: bold;
+  }
+
+  .active{
+    color:#FFF;
+    font-weight: bolder;
+  }
+  
 }

@@ -18,19 +18,14 @@ export const routes = [
     component: () => import("./pages/LandingGeneral.vue"),
   },
   {
+    path: "/novedades",
+    name: "novedades",
+    component: () => import("./pages/Novedades.vue"),
+  },
+  {
     path: "/admin/login",
     name: "login_admin",
     component: () => import("./pages/LoginAdmin.vue"),
-  },
-  {
-    path: "/empresas/login",
-    name: "login_empresas",
-    component: () => import("./pages/LoginEmpresas.vue"),
-  },
-  {
-    path: "/trabajadores/login",
-    name: "login_trabajadores",
-    component: () => import("./pages/LoginTrabajadores.vue"),
   },
   {
     path: '/404',

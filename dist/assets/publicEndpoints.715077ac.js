@@ -1,0 +1,1 @@
+import{j as e}from"./index.acabe0f6.js";const t=e("https://precios.api.greenborn.com.ar",!1);function r(e){return t({url:"/products_by_price?product_name="+encodeURI(e),method:"get"})}function n(){return t({url:"/public-incremental-stats",method:"get"})}function o(){return t({url:"/public-news",method:"get"})}export{r as b,n as i,o as p};
