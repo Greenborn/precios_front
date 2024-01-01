@@ -108,7 +108,7 @@ const resultados = ref([]);
 const estadisticas_inc = ref([])
 
 async function buscar ( termino = undefined ) {
-    if (termino != undefined)
+    if (termino != undefined && typeof termino == 'string')
         termino_busqueda.value = termino
 
     if (termino_busqueda.value === '') {

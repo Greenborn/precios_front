@@ -4,16 +4,8 @@ import { getToken } from './utils/auth'
 import Layout from './components/layout/Layout.vue'
 
 export const routes = [
-  
   {
     path: "/",
-    name: 'root',
-    redirect: 'dashboard',
-    component: Layout,
-    children: []
-  },
-  {
-    path: "/dashboard",
     name: "dashboard",
     component: () => import("./pages/LandingGeneral.vue"),
   },

@@ -40,13 +40,6 @@ $dark_gray: #889aa4;
 #app{
   width: 100vw;
 
-  --background: none;
-  background-image: url('public/images/bg1.png');
-  -webkit-background-size: repeat;
-  -moz-background-size: repeat;
-  background-size: repeat;
-  background-repeat: repeat;
-
   overflow-x: hidden;
   min-height: 100vh;
 }

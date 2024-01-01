@@ -59,13 +59,5 @@ app.component("Column", Column);
 app.component("Editor", Editor);
 app.component("Calendar", Calendar);
 
-setTimeout( async ()=>{ 
-  let router_mod = await getRouterConRutas(router, storeApp)
-  app.use(router);
- 
-  if ( router_mod ){}
-    app.use(router_mod);
-  
-  routerBeforeEach( router, storeApp )
-  app.mount("#app");
-}, 1)
+app.use(router);
+app.mount("#app");
