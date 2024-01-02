@@ -59,6 +59,26 @@
     </div>
 
     <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+
+            <div class="alert alert-success">
+                <p><b>Disclaimer:</b></p>
+                <p>
+                    Si <b>NO</b> queres que tu negocio figure en el listado escribí por MP a 
+                    <a href="https://www.facebook.com/TandilPreciosBaratos">TandilPreciosBaratos</a>
+                    proporcionando medios de contacto oficiales.
+                </p>
+                <p>
+                    La información proporcionada es obtenida a partir de canales de acceso público y datos 
+                    proporcionados por usuarios y puede no ser del todo consistente con la realidad pero da una 
+                    idea general de los valores.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row align-items-center justify-content-center">
         <div class="col-12 col-md-10 col-lg-8 ">
             <div class="card mb-1 p-0">
 
@@ -113,6 +133,11 @@ async function buscar ( termino = undefined ) {
 
     if (termino_busqueda.value === '') {
         storeApp.mostrar_alerta( "Por favor, ingrese el nombre del producto." )
+        return false
+    }
+
+    if (termino_busqueda.value.length < 3) {
+        storeApp.mostrar_alerta( "El nombre del producto debe tener al menos 3 caracteres." )
         return false
     }
 
