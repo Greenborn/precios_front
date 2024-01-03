@@ -40,14 +40,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 import { AppStore } from "../../stores/app"
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const emit  = defineEmits(['buscar_evnt'])
 const storeApp = AppStore()
 const router = useRouter()
+const route = useRoute()
 
 const termino_busqueda = ref('')
 
@@ -65,6 +66,10 @@ function click( item ){
 function buscar(){
   emit('buscar_evnt', termino_busqueda.value)
 }
+
+onMounted(()=>{
+    storeApp.ruta_actual['path'] = route.path
+})
 </script>
 
 <style>
