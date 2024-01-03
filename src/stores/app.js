@@ -10,7 +10,7 @@ export const AppStore = defineStore('app',() =>  {
   const tipoUsuario    = ref('')
   const opcionesMenu   = ref([])
   const sidebarVisible = ref(true)
-  const ruta_actual    = ref({})
+  const ruta_actual    = ref({ path: "/" })
 
   const modal_generico   = ref({ activo: false, componente: null, parametros: {}, titulo: '' })
 

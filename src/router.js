@@ -15,6 +15,11 @@ export const routes = [
     component: () => import("./pages/Novedades.vue"),
   },
   {
+    path: "/estadisticas",
+    name: "estadisticas",
+    component: () => import("./pages/EstadisticasGenerales.vue"),
+  },
+  {
     path: "/admin/login",
     name: "login_admin",
     component: () => import("./pages/LoginAdmin.vue"),

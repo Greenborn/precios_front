@@ -1,31 +1,5 @@
 <template>
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark p-0 bg-primary">
-    <div class="container p-0">
-    <a class="navbar-brand" href="#/">
-        <div class="row align-items-center justify-content-center">
-        <div class="col">
-            <b class="ml-3">Precios de Tandil</b>
-        </div>
-        </div>
-    </a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-            
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto p-3">
-        <li class="nav-item">
-            <a class="nav-link" href="#/">Buscador</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="#/novedades">Novedades</a>
-        </li>
-        </ul>
-    </div>  
-    </div>
-</nav>
+<PublicTopBar />
     
 <div class="container-fluid" id="novedades-cnt">
     <div class="row align-items-center justify-content-center">
@@ -64,6 +38,7 @@
     import { ref, onMounted } from 'vue'
     import { public_news } from '../api/public/publicEndpoints'
     import { AppStore } from "../stores/app"
+    import PublicTopBar from '../components/publico/PublicTopBar.vue';
 
     const storeApp = AppStore()
   
