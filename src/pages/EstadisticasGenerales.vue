@@ -6,14 +6,34 @@
         <div class="row align-items-center justify-content-center">
             <div class="col-12 col-md-10 col-lg-8 ">
 
-                <div class="accordion" id="acordionCantPrecios">
+                <div class="accordion" id="acordionEstadisticas">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Términos de Búsqueda más Consultados <small>(Calculadas en la última actualización de precios)</small>
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#acordionEstadisticas">
+                            <div class="accordion-body">
+                                <p>
+                                    Más búscados de la semana
+                                </p>
+                                <ul class="list-group">
+                                    <li v-for="(item) in mas_buscados" :key="item" class="list-group-item">
+                                        <b>{{ item.termino }}</b>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
                                 Cantidad de precios por negocio
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#acordionCantPrecios">
+                        <div id="collapse2" class="accordion-collapse collapse show" data-bs-parent="#acordionEstadisticas">
                             <div class="accordion-body">
                                 <p>
                                     Aquí se muestra el total de precios histórico registrado por cada comercio.
@@ -46,17 +66,30 @@ import PublicTopBar from "../components/publico/PublicTopBar.vue";
 const storeApp = AppStore()
   
 const precios_por_negocio = ref([])
+const mas_buscados = ref([])
 
 onMounted(async ()=>{
     storeApp.loading = true
     let res = await get_estadistica('precios_por_negocio')
     if (res){
         storeApp.loading = false
-        if (res?.error){
+        if (!res.stat){
             storeApp.mostrar_alerta( "Ocurrio un error al cargar las estadisticas de precios por negocio" )
             return false
         }
         precios_por_negocio.value = res?.items
+    } else
+        storeApp.loading = false
+
+    storeApp.loading = true
+    let res2 = await get_estadistica('trending')
+    if (res2){
+        storeApp.loading = false
+        if (!res2.stat){
+            storeApp.mostrar_alerta( "Ocurrio un error al cargar las estadisticas de mas buscados" )
+            return false
+        }
+        mas_buscados.value = res2?.items
     } else
         storeApp.loading = false
 })

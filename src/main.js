@@ -16,6 +16,7 @@ import { routerBeforeEach } from './utils/routes'
 import { router } from "./router";
 
 import Menubar from 'primevue/menubar';
+import Chart from 'primevue/chart';
 import InputSwitch from "primevue/inputswitch";
 import Button from "primevue/button";
 import DataTable from 'primevue/datatable';
@@ -58,6 +59,7 @@ app.component("ContextMenu", ContextMenu);
 app.component("Column", Column);
 app.component("Editor", Editor);
 app.component("Calendar", Calendar);
+app.component("Chart", Chart);
 
 app.use(router);
 app.mount("#app");

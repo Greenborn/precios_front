@@ -47,8 +47,23 @@
                                 
                             </div>
                             <div class="card-body p-4">
-                                <p class="pb-1 mb-0 mt-0"><b>Actualizado el:</b> {{ resultado?.date_time }}</p>
-                                <p class="pb-1 mb-0 mt-0"><b>Comercio:</b> {{ resultado?.branch?.name }} (uno de sus locales)</p>                                
+                                <div class="row">
+
+                                    <div class="col">
+                                        <p class="pb-1 mb-0 mt-0"><b>Actualizado el:</b> {{ formateaFecha(resultado?.date_time) }}</p>
+                                        <p class="pb-1 mb-0 mt-0"><b>Comercio:</b> {{ resultado?.branch?.name }} (uno de sus locales)</p> 
+                                    </div>
+                                    
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-primary" @click="mostrar_estadisticas(resultado)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                </div>
+                                
                             </div>
                         </div>
                     </template>
@@ -115,10 +130,12 @@
 
 <script setup>
 import { ref, onMounted  } from 'vue'
-import { busqueda, incremental_stats } from '../../api/public/publicEndpoints'
+import { busqueda, get_estadistica } from '../../api/public/publicEndpoints'
 
-import { formatMoney } from '../../helpers/formatter'
+import { formatMoney, fechaDateToString } from '../../helpers/formatter'
 import { AppStore } from "../../stores/app"
+
+import GraficoEvolucionPrecio from './GraficoEvolucionPrecio.vue'
 
 defineExpose({ buscar })
 const storeApp = AppStore()
@@ -126,6 +143,26 @@ const storeApp = AppStore()
 const termino_busqueda = ref('')
 const resultados = ref([]);
 const estadisticas_inc = ref([])
+const MODAL_STYLE = { width: '100vw', "min-width": "766px" }
+
+async function mostrar_estadisticas( item ){
+    storeApp.loading = true
+    let res = await get_estadistica( "variacion_precio&id_producto="+item.product_id+"&id_local="+item.branch_id );
+    if (res){
+        storeApp.loading = false
+        
+        storeApp.mostrar_modal(GraficoEvolucionPrecio, 'Variación del Precio a lo largo del tiempo',
+            {
+                'item': item,
+                'resultados': res,
+                
+                }, 
+                { 'styles': MODAL_STYLE })
+        
+    } else {
+        storeApp.loading = false
+    }
+}
 
 async function buscar ( termino = undefined ) {
     if (termino != undefined && typeof termino == 'string')
@@ -150,6 +187,11 @@ async function buscar ( termino = undefined ) {
             storeApp.mostrar_alerta( "Ocurrio un error, re-intente más tarde." )
             return false
         }
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        })
         resultados.value = res?.items ? res.items: [];
         return true
     } else {
@@ -158,13 +200,20 @@ async function buscar ( termino = undefined ) {
     }
 }
 
+function formateaFecha( fecha ){
+    fecha = new Date(fecha.replace("Z",""))
+    fecha.setHours(fecha.getHours() - 3)
+    
+    return fechaDateToString(fecha,"/")
+}
+
 async function hacer_busqueda(){
     await buscar(termino_busqueda.value)
 }
 
 async function cargar_estadisticas(){
     storeApp.loading = true
-    let res = await incremental_stats()
+    let res = await get_estadistica("incremental_stats")
     if (res){
         storeApp.loading = false
         if (res?.error){

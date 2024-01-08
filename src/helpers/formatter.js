@@ -39,9 +39,12 @@ export function dataToFormData( data ){
   return formData
 }
 
-export function fechaStringToDate( fecha, separador ){
+export function fechaStringToDate( fecha, separador, formato = "DD-MM-YYYY" ){
   let arr_fecha = fecha.split(separador)
-  fecha = new Date(arr_fecha[0], arr_fecha[1] - 1, arr_fecha[2])
+  if (formato == "YYYY-MM-DD")
+    fecha = new Date(arr_fecha[0], arr_fecha[1] - 1, arr_fecha[2])
+  else
+    fecha = new Date(arr_fecha[2], arr_fecha[1] - 1, arr_fecha[0])
   return fecha
 }
 
