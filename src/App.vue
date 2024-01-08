@@ -1,15 +1,13 @@
 <template>
   <router-view />
 
-  <Dialog :header="storeApp.modal_generico.titulo" v-model:visible="storeApp.modal_generico.activo" >
-    <component :is="storeApp.modal_generico.componente" :parametros="storeApp.modal_generico.parametros"></component>
-  </Dialog>
+  <ModalsManager></ModalsManager>
   <Spinner :loading="storeApp.loading"></Spinner>
 </template>
 
 <script setup >
   import { AppStore } from "./stores/app";
-
+  import ModalsManager   from './components/layout/ModalsManager.vue'
   import Spinner   from './components/layout/Spinner.vue'
 
   const storeApp = AppStore()

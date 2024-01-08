@@ -1,6 +1,11 @@
 <template>
-    <h4>{{ parametros?.item?.products?.name }}</h4>
-    <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" />
+    <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <h4>{{ parametros?.item?.products?.name }}</h4>
+            <Chart type="line" :data="chartData" :options="chartOptions" class="w-full" />
+        </div>
+    </div>
+    
 </template>
 
 <script setup>
@@ -14,14 +19,16 @@ const chartData = ref({
         datasets: [
             {
                 label: 'Precio a lo largo del tiempo',
-                data: [65, 59, 80, 81, 56, 55, 40],
+                data: [],
                 fill: false,
                 borderColor: "#198754",
-                tension: 0.4
+                tension: 0
             },
         ]
     });
-const chartOptions = ref();
+const chartOptions = ref({
+    "responsive": true
+});
 
 
 function insertar_ordenado( array_, elemento, campo = 'price' ){

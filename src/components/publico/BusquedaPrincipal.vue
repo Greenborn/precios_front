@@ -143,7 +143,7 @@ const storeApp = AppStore()
 const termino_busqueda = ref('')
 const resultados = ref([]);
 const estadisticas_inc = ref([])
-const MODAL_STYLE = { width: '100vw', "min-width": "766px" }
+const MODAL_STYLE = { width: '100vw', 'min-height': "100vh" }
 
 async function mostrar_estadisticas( item ){
     storeApp.loading = true
@@ -201,7 +201,7 @@ async function buscar ( termino = undefined ) {
 }
 
 function formateaFecha( fecha ){
-    fecha = new Date(fecha.replace("Z",""))
+    fecha = new Date(fecha)
     fecha.setHours(fecha.getHours() - 3)
     
     return fechaDateToString(fecha,"/")
