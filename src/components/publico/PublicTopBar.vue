@@ -9,6 +9,16 @@
         </div>
       </a>
 
+      <div class="d-flex d-md-none" v-if="storeApp.ruta_actual.path == '/carga_precio'">
+        <div class="w-100" >
+          <div class="row align-items-center justify-content-center">
+            <div class="col-auto p-0">
+              <button class="btn btn-success" type="button" @click="agregar">Agregar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -27,15 +37,7 @@
         </div>
       </div>
 
-      <div class="d-flex d-md-none" v-if="storeApp.ruta_actual.path == '/carga_precio'">
-        <div class="w-100" id="cont_busca">
-          <div class="row align-items-center justify-content-center">
-            <div class="col-auto p-0">
-              <button class="btn btn-success" type="button" @click="agregar">Agregar Producto</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      
       
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto p-3">

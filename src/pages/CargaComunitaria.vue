@@ -48,7 +48,7 @@
                             <div class="col"></div>
                         </div>
 
-                        <div class="row border-top align-items-center" v-for="(product, index) in datos_formulario.productos" :key="product">
+                        <div class="row border-top align-items-center border-top border-bottom" v-for="(product, index) in datos_formulario.productos" :key="product">
                             <div class="col">
                                 <div class="row">
                                     <div class="col-12 col-md-3">
