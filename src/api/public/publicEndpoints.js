@@ -12,3 +12,7 @@ export function public_news() {
 export function get_estadistica(id) {
   return request({ url: '/publico/estadistica/data?id_estadistica='+id, method: 'get' })
 }
+
+export function enviar_datos(datos) {
+  return request({ url: '/publico/estadistica/precios_usuarios', method: 'post', data: datos })
+}

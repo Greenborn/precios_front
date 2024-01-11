@@ -10,6 +10,11 @@ export const routes = [
     component: () => import("./pages/LandingGeneral.vue"),
   },
   {
+    path: "/carga_precio",
+    name: "carga_precio",
+    component: () => import("./pages/CargaComunitaria.vue"),
+  },
+  {
     path: "/novedades",
     name: "novedades",
     component: () => import("./pages/Novedades.vue"),

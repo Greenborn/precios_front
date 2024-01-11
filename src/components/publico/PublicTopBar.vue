@@ -26,6 +26,16 @@
           </div>
         </div>
       </div>
+
+      <div class="d-flex d-md-none" v-if="storeApp.ruta_actual.path == '/carga_precio'">
+        <div class="w-100" id="cont_busca">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-auto p-0">
+              <button class="btn btn-success" type="button" @click="agregar">Agregar Producto</button>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto p-3">
@@ -45,7 +55,7 @@ import { ref, onMounted } from 'vue'
 import { AppStore } from "../../stores/app"
 import { useRouter, useRoute } from 'vue-router'
 
-const emit  = defineEmits(['buscar_evnt'])
+const emit  = defineEmits(['buscar_evnt', 'agregar_evnt'])
 const storeApp = AppStore()
 const router = useRouter()
 const route = useRoute()
@@ -54,6 +64,7 @@ const termino_busqueda = ref('')
 
 const enlaces = ref([
     { path: '/', title: 'Buscador' },
+    { path: '/carga_precio', title: 'Cargá tu precio' },
     { path: '/novedades', title: 'Novedades' },
     { path: '/estadisticas', title: 'Estadísticas' }
 ])
@@ -65,6 +76,10 @@ function click( item ){
 
 function buscar(){
   emit('buscar_evnt', termino_busqueda.value)
+}
+
+function agregar(){
+  emit('agregar_evnt', true)
 }
 
 onMounted(()=>{
