@@ -8,7 +8,7 @@
 
                 <div class="card mt-1 mb-1 p-0">
                     <div class="card-header p-4">
-                        <h4>Carga de Comunitaria de Precios</h4>
+                        <h4>Carga Colaborativa de Precios</h4>
                         <p>Este formulario está pensado para que cualquier persona pueda cargar sus propios precios <br>
                         Cada producto que carge internamente se guardará como un registro en una tabla que luego de ser validado se cargará en el sistema</p>
                     </div>
