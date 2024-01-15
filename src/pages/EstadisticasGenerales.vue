@@ -10,12 +10,13 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
-                                Variación de precios entre ayer y hoy, ordenados por porcentaje de variación de mayor a menor
+                                Variación de precios entre ayer y hoy, ordenados por porcentaje de variación de mayor a menor - 
+                                Hay que tener en cuenta que algunas variaciones exageradas pueden deberse a artículos que antes estaban en promoción y ahora no lo están
                             </button>
                         </h2>
                         <div id="collapse3" class="accordion-collapse collapse show" data-bs-parent="#acordionEstadisticas">
                             <div class="accordion-body">
-                                
+                                <p> Para calcular el procentaje de variación se toma la diferencia entre los últimos dos precios registrados y se divide por el precio anterior/100</p>
                                 <ul class="list-group">
                                     <li class="list-group-item"  v-for="(item) in mayor_aumento_diario" :key="item">
                                         <div class="row">
