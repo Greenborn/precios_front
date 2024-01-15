@@ -70,7 +70,7 @@ export const AppStore = defineStore('app',() =>  {
       let m_ordenados = modals_ordenados()
 
       this.modals_       = m_ordenados.modals
-      console.log(m_ordenados)
+      //console.log(m_ordenados)
       config_modal['id'] = m_ordenados.ultimo_id + 1
     }
 

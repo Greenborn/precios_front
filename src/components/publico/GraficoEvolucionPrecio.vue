@@ -74,13 +74,16 @@ onMounted(() => {
     let resultados = props.parametros.resultados['items']
 
     for (let i = 0; i < resultados.length; i++){
-        resultados[i]['date_time'] = new Date(resultados[i].date_time).getTime()
+        let fecha = new Date(resultados[i].date_time)
+        fecha.setHours(0,0,0,0)
+        resultados[i]['date_time'] = fecha.getTime()
         precios = insertar_ordenado(precios, resultados[i], 'date_time')
     }
-    let ultimo = precios[precios.length-1]['date_time']
 
+    let ultimo = precios[precios.length-1]['date_time']
+    
     let cant_dias = Math.floor((ultimo-precios[0]['date_time']) / 1000 / 60 / 60 / 24) + 1
-   
+    
     let dia_ini = new Date(precios[0]['date_time'])
     for (let i = 0; i < cant_dias; i++){
         labels.push( fechaDateToString( dia_ini, "/" ) )
