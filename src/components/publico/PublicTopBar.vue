@@ -66,9 +66,10 @@ const termino_busqueda = ref('')
 
 const enlaces = ref([
     { path: '/', title: 'Buscador' },
-    { path: '/carga_precio', title: 'Cargá tu precio' },
-    { path: '/novedades', title: 'Novedades' },
-    { path: '/estadisticas', title: 'Estadísticas' }
+    { path: '/carga_precio', title: 'Carga de Precios' },
+    { path: '/categorias', title: 'Navegar por Categorías' },
+    { path: '/estadisticas', title: 'Estadísticas' },
+    { path: '/novedades', title: 'Novedades' }
 ])
 
 function click( item ){

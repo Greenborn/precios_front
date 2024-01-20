@@ -20,6 +20,11 @@ export const routes = [
     component: () => import("./pages/Novedades.vue"),
   },
   {
+    path: "/categorias",
+    name: "categorias",
+    component: () => import("./pages/NavegaCategorias.vue"),
+  },
+  {
     path: "/estadisticas",
     name: "estadisticas",
     component: () => import("./pages/EstadisticasGenerales.vue"),

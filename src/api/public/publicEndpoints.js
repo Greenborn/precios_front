@@ -16,3 +16,7 @@ export function get_estadistica(id) {
 export function enviar_datos(datos) {
   return request({ url: '/publico/estadistica/precios_usuarios', method: 'post', data: datos })
 }
+
+export function get_categorias() {
+  return request({ url: '/publico/categorias/all', method: 'get' })
+}
