@@ -61,8 +61,11 @@
                                         <div class="row">
                                             <div class="col cnt-negocios">
                                                 <div>
-                                                    <b>Comercio: &nbsp;</b>
-                                                    <span v-for="comercio in resultado?.locales" :key="comercio">{{ comercio?.name }} &nbsp;</span>
+                                                    <b>Comercio: &nbsp;</b> {{ resultado?.empresa?.name }} &nbsp; -
+                                                    <span v-for="comercio in resultado?.locales" :key="comercio">
+                                                        {{ comercio?.address_road }} &nbsp;
+                                                        {{ comercio?.address_number }}  &nbsp; |
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
