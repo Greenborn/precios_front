@@ -1,7 +1,7 @@
 <template>
     <div class="row align-items-center justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
-            <h4>{{ parametros?.item?.products?.name }}</h4>
+            <h4>{{ parametros?.item?.products?.name }} - {{ parametros?.item?.nombre_comercio }}{{ parametros?.item?.empresa?.name }}</h4>
             <Chart type="line" :data="chartData" :options="chartOptions" class="w-full" />
         </div>
     </div>
@@ -63,9 +63,43 @@ onMounted(() => {
     }
 
     let data_set = []
+    let fecha_existe = {}
+    let aux_fechas = []
     for (let i = 0; i < precios.length; i++){
-        labels.push( fechaDateToString( new Date( precios[i]['date_time'] ), "/", 'dd-mm-YYYY H:M' ) )
-        data_set.push( precios[i].price )
+        if ( fecha_existe[precios[i]['date_time']] == undefined){
+            fecha_existe[precios[i]['date_time']] = true
+            labels.push( fechaDateToString( new Date( precios[i]['date_time'] ), "/", 'dd-mm-YYYY H:M' ) )
+            aux_fechas.push( precios[i]['date_time'] )
+            data_set.push( precios[i].price )
+        }
+    }
+
+    let labels_aux = []
+    let data_aux = []
+    const CANT_E = data_set.length
+    if (CANT_E > 1){
+        for (let i = 1; i < CANT_E; i++){
+            let dato1_f = new Date(aux_fechas[i-1])
+            let dato2_f = new Date(aux_fechas[i])
+
+            labels_aux.push( labels[i-1])
+            data_aux.push( data_set[i-1] )
+            
+            if (dato1_f.getTime() < dato2_f.getTime() ){
+                console.log(dato1_f.getTime(), dato2_f.getTime())
+                let f_ini = new Date(dato1_f)
+                f_ini.setDate(f_ini.getDate() + 1)
+                while (f_ini.getTime() < dato2_f.getTime()){
+                    labels_aux.push( fechaDateToString( f_ini, "/", 'dd-mm-YYYY' ) )
+                    data_aux.push( data_set[i-1] )
+                    f_ini.setDate(f_ini.getDate() + 1)
+                }           
+            }
+        }
+        labels_aux.push( labels[CANT_E-1])
+        data_aux.push( data_set[CANT_E-1] )
+        labels = labels_aux
+        data_set = data_aux
     }
 
     chartData.value.labels = labels
