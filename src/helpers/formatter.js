@@ -71,5 +71,7 @@ export function fechaDateToString( fecha, separador, formato='dd-mm-YYYY' ){
   formato = formato.replace('mm', defineCantDigitosInt(fecha.getMonth() + 1, 2))
   formato = formato.replace('YYYY', fecha.getFullYear())
   formato = formato.replaceAll('-', separador)
+  formato = formato.replace('H', defineCantDigitosInt(fecha.getHours(), 2))
+  formato = formato.replace('M', defineCantDigitosInt(fecha.getMinutes(), 2))
   return formato
 }
