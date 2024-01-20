@@ -37,22 +37,35 @@
                         <div v-for="resultado in resultados" :key="resultado.producto" class="card mb-1 p-0">
                             <div class="card-header p-4 pt-0 pb-0">
                                 <div class="row align-items-center justify-content-center">
-                                    <div class="col-12 col-sm-4 price-cont">
-                                        $ {{ formatMoney(resultado?.price) }}
+                                    <div class="col-12 col-sm-4">
+                                        <p class="price-cont mb-0">$ {{ formatMoney(resultado?.price) }}</p>
+                                        <b><small>{{ formateaFecha(resultado?.date_time) }}</small></b>
                                     </div>
-                                    <div class="col-12 col-sm-8 product-name-cont">
+                                    <div class="col-12 col-sm product-name-cont">
                                         {{ resultado?.products?.name }}
                                         <small v-if="resultado?.url"><a :href="resultado?.url" target="_blank">ir a web</a></small>
                                     </div>
                                 </div>
                                 
                             </div>
-                            <div class="card-body p-4">
-                                <div class="row">
+                            <div class="card-body pl-4 pr-4">
+                                <div class="row align-items-center justify-content-center">
 
                                     <div class="col">
-                                        <p class="pb-1 mb-0 mt-0"><b>Actualizado el:</b> {{ formateaFecha(resultado?.date_time) }}</p>
-                                        <span class="text-success"><b>{{ resultado?.notas }}</b></span>
+                                        <div class="row" v-if="resultado?.notas != '' && resultado?.notas != null">
+                                            <div class="col">
+                                                <span class="text-success"><b>{{ resultado?.notas }}</b></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col cnt-negocios">
+                                                <div>
+                                                    <b>Comercio: &nbsp;</b>
+                                                    <span v-for="comercio in resultado?.locales" :key="comercio">{{ comercio?.name }} &nbsp;</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <div class="col-auto">
@@ -63,15 +76,6 @@
                                         </button>
                                     </div>
 
-                                </div>
-
-                                <div class="row">
-                                    <div class="col cnt-negocios">
-                                        <div>
-                                            <b>Comercio: &nbsp;</b>
-                                            <span v-for="comercio in resultado?.locales" :key="comercio">{{ comercio?.name }}</span>
-                                        </div>
-                                    </div>
                                 </div>
                                 
                             </div>
