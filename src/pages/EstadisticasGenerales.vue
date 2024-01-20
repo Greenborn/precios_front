@@ -10,13 +10,15 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
-                                Variación de precios entre ayer y hoy, ordenados por porcentaje de variación de mayor a menor - 
+                                Variación de precios diaria, ordenados por porcentaje de variación de mayor a menor - 
                                 Hay que tener en cuenta que algunas variaciones exageradas pueden deberse a artículos que antes estaban en promoción y ahora no lo están
                             </button>
                         </h2>
                         <div id="collapse3" class="accordion-collapse collapse show" data-bs-parent="#acordionEstadisticas">
                             <div class="accordion-body">
                                 <p> Para calcular el procentaje de variación se toma la diferencia entre los últimos dos precios registrados y se divide por el precio anterior/100</p>
+                                <p> La media del porcentaje de todos los elementos es: <b>{{ media_porcentaje_aumento }}%</b></p>
+                                <p> Calculado el: {{ fechaDateToString(new Date(mayor_aumento_diario[0]?.fecha_utlimo_precio), '/') }}</p>
                                 <ul class="list-group">
                                     <li class="list-group-item"  v-for="(item) in mayor_aumento_diario" :key="item">
                                         <div class="row">
@@ -99,7 +101,7 @@ import { AppStore } from "../stores/app"
 import { get_estadistica } from '../api/public/publicEndpoints'
 import PublicTopBar from "../components/publico/PublicTopBar.vue";
 import GraficoEvolucionPrecio from '../components/publico/GraficoEvolucionPrecio.vue'
-
+import { formatMoney, fechaDateToString } from '../helpers/formatter'
 
 const MODAL_STYLE = { width: '100vw', 'min-height': "100vh" }
 const storeApp = AppStore()
@@ -107,6 +109,7 @@ const storeApp = AppStore()
 const precios_por_negocio = ref([])
 const mas_buscados = ref([])
 const mayor_aumento_diario = ref([])
+const media_porcentaje_aumento = ref(undefined)
 
 async function mostrar_estadisticas( item ){
     storeApp.loading = true
@@ -116,7 +119,7 @@ async function mostrar_estadisticas( item ){
         
         storeApp.mostrar_modal(GraficoEvolucionPrecio, 'Variación del Precio a lo largo del tiempo',
             {
-                'item': item,
+                'item': {...item, products: {"name": item.nombre_producto}},
                 'resultados': res,
                 
                 }, 
@@ -162,6 +165,10 @@ onMounted(async ()=>{
             return false
         }
         mayor_aumento_diario.value = res3?.items
+        const cant = mayor_aumento_diario.value.length
+        if (cant > 2){
+            media_porcentaje_aumento.value = mayor_aumento_diario.value[Math.floor(cant/2)].porcentaje_aumento
+        }
     } else
         storeApp.loading = false
 })

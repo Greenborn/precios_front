@@ -42,6 +42,7 @@
                                     </div>
                                     <div class="col-12 col-sm-8 product-name-cont">
                                         {{ resultado?.products?.name }}
+                                        <small v-if="resultado?.url"><a :href="resultado?.url" target="_blank">ir a web</a></small>
                                     </div>
                                 </div>
                                 
@@ -51,7 +52,7 @@
 
                                     <div class="col">
                                         <p class="pb-1 mb-0 mt-0"><b>Actualizado el:</b> {{ formateaFecha(resultado?.date_time) }}</p>
-                                        <p class="pb-1 mb-0 mt-0"><b>Comercio:</b> {{ resultado?.branch?.name }} (uno de sus locales)</p> 
+                                        <span class="text-success"><b>{{ resultado?.notas }}</b></span>
                                     </div>
                                     
                                     <div class="col-auto">
@@ -62,6 +63,15 @@
                                         </button>
                                     </div>
 
+                                </div>
+
+                                <div class="row">
+                                    <div class="col cnt-negocios">
+                                        <div>
+                                            <b>Comercio: &nbsp;</b>
+                                            <span v-for="comercio in resultado?.locales" :key="comercio">{{ comercio?.name }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                             </div>
@@ -245,6 +255,12 @@ onMounted(async ()=>{
   font-weight: bolder;
   font-size: 1rem;
   color: #1e3c82;
+}
+
+.cnt-negocios{
+    overflow-x: scroll;
+    max-height: 3rem;
+    overflow-y: hidden;
 }
 
 #buscador-cnt{
