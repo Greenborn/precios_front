@@ -20,3 +20,7 @@ export function enviar_datos(datos) {
 export function get_categorias() {
   return request({ url: '/publico/categorias/all', method: 'get' })
 }
+
+export function get_empresas_categoria( menu_category_id ) {
+  return request({ url: '/publico/categorias/get_empresas_categoria?menu_category_id='+menu_category_id, method: 'get' })
+}
