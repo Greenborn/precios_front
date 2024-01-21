@@ -5,8 +5,16 @@
         <div class="row align-items-center justify-content-center">
             <div class="col-12 col-md-10 col-lg-8 ">
                 
-                <div class="row">
-                    <div class="col-12">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-auto">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item" v-for="bc in bread_crumbs" :key="bc">
+                                    <a href="#/categorias" v-if="bc.visible < fase" @click="breadcrumb_click(bc)">{{ bc.label }}</a>
+                                    <span v-if = "bc.visible == fase">{{ bc.label }}</span>
+                                </li>
+                            </ol>
+                        </nav>
                     </div>
                 </div>
 
@@ -37,12 +45,22 @@ import { ref, onMounted } from 'vue'
 import { AppStore } from "../stores/app"
 import PublicTopBar from "../components/publico/PublicTopBar.vue";
 
-import { get_categorias, get_empresas_categoria } from '../api/public/publicEndpoints'
+import { get_categorias, get_empresas_categoria, get_categorias_empresa, get_productos } from '../api/public/publicEndpoints'
 
 const storeApp = AppStore()
 
-const categorias_lst = ref([])
-const enterprise_lst = ref([])
+const bread_crumbs = ref([
+    { label: 'Tipo de Comercio', visible:0, tipo_cat: "category" },
+    { label: 'Comercio', visible:1, tipo_cat: "enterprice" },
+    { label: 'Categoría',  visible:2, tipo_cat: "category_prod" },
+])
+const fase = ref(0)
+
+const listados = ref({
+    "category": [],
+    "enterprice": [],
+    "category_prod": []
+})
 const tipo_categoria = ref("category")
 const menu_lst = ref([])
 
@@ -55,11 +73,17 @@ onMounted(async ()=>{
             storeApp.mostrar_alerta( "Ocurrió un error al cargar el listado de categorías" )
             return false
         }
-        categorias_lst.value = res?.items
-        menu_lst.value = categorias_lst.value
+        listados.value[tipo_categoria.value] = res?.items
+        menu_lst.value = res?.items
     } else
         storeApp.loading = false
 })
+
+function breadcrumb_click( bc ){
+    menu_lst.value       = listados.value[ bc.tipo_cat ]
+    tipo_categoria.value = bc.tipo_cat
+    fase.value           = bc.visible
+}
 
 async function categoria_click( cat ){
     if (tipo_categoria.value == "category"){
@@ -71,12 +95,61 @@ async function categoria_click( cat ){
                 storeApp.mostrar_alerta( "Ocurrió un error al cargar el listado de comercios" )
                 return false
             }
-            enterprise_lst.value = res?.items
-            for ( let i = 0; i < enterprise_lst.value.length; i++ )
-                enterprise_lst.value[i]['nombre'] = enterprise_lst.value[i]['enterprice']['name']
+            let enterprise_lst = res?.items
+            for ( let i = 0; i < enterprise_lst.length; i++ )
+                enterprise_lst[i]['nombre'] = enterprise_lst[i]['enterprice']['name']
             
             tipo_categoria.value = "enterprice"
-            menu_lst.value = enterprise_lst.value
+            fase.value = 1
+            listados.value[tipo_categoria.value] = enterprise_lst
+            menu_lst.value = enterprise_lst
+        } else
+            storeApp.loading = false
+    } 
+    
+    else if (tipo_categoria.value == "enterprice"){
+        storeApp.loading = true
+        let res = await get_categorias_empresa( cat?.enterprice?.id )
+        if (res){
+            storeApp.loading = false
+            if (!res.stat){
+                storeApp.mostrar_alerta( "Ocurrió un error al cargar el listado de comercios" )
+                return false
+            }
+            let enter_cat_lst = res?.items
+            for ( let i = 0; i < enter_cat_lst.length; i++ )
+                enter_cat_lst[i]['nombre'] = enter_cat_lst[i]['category']['name']
+            
+            tipo_categoria.value = "category_prod"
+            fase.value = 2
+            menu_lst.value = enter_cat_lst
+            listados.value[tipo_categoria.value] = enter_cat_lst
+        } else
+            storeApp.loading = false
+    } 
+
+    else if (tipo_categoria.value == "category_prod"){
+        storeApp.loading = true
+        let res = await get_productos( cat?.category?.id )
+        if (res){
+            storeApp.loading = false
+            if (!res.stat){
+                storeApp.mostrar_alerta( "Ocurrió un error al cargar el listado de comercios" )
+                return false
+            }
+            let products_lst = []
+            
+            let keys = Object.keys(res?.items)
+            for (let i=0; i < keys.length; i++){
+                let item = res?.items[keys[i]]
+                item["nombre"] = item["name"]
+                products_lst.push(item)
+            }
+
+            tipo_categoria.value = "category_prod"
+            fase.value = 2
+            menu_lst.value = products_lst
+            listados.value[tipo_categoria.value] = products_lst
         } else
             storeApp.loading = false
     }

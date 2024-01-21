@@ -24,3 +24,11 @@ export function get_categorias() {
 export function get_empresas_categoria( menu_category_id ) {
   return request({ url: '/publico/categorias/get_empresas_categoria?menu_category_id='+menu_category_id, method: 'get' })
 }
+
+export function get_categorias_empresa( enterprise_id ) {
+  return request({ url: '/publico/categorias/get_categoria_empresa?enterprise_id='+enterprise_id, method: 'get' })
+}
+
+export function get_productos( category_id ) {
+  return request({ url: '/publico/productos/all?category_id='+category_id, method: 'get' })
+}
