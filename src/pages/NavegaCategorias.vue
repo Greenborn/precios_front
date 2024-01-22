@@ -18,6 +18,19 @@
                     </div>
                 </div>
 
+                <div v-if="fase == 3" class="row align-items-center justify-content-center">
+                    <div class="col-auto">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <label for="filter" class="col-form-label">Filtrar</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" v-model="filtro" id="filter" class="form-control" @keyup="filtrador" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-12 col-sm-6 col-lg-4" v-for="cat in menu_lst" :key="cat">
                         
@@ -34,15 +47,13 @@
                         </div>
 
                         <div v-if="fase == 3" 
-                            class="card text-bg-secundary mb-3" style="height: 20rem;" 
+                            class="card text-bg-secundary mb-3" style="height: 20rem; overflow-y: scroll;" 
                         >
+                            <div class="card-header text-center">
+                                <b>{{ cat.name }}</b>
+                            </div>
+                            
                             <div class="card-body text-center">
-                                <div class="row align-items-center justify-content-center">
-                                    <div class="col">
-                                        <b>{{ cat.name }}</b>
-                                    </div>
-                                </div>
-
                                 <div class="row align-items-center justify-content-center">
                                     <div class="col" >
 
@@ -68,6 +79,10 @@
                             </div>
                         </div>
 
+                    </div>
+
+                    <div class="alert alert-info mt-3" v-if="menu_lst.length == 0">
+                        No hay resultados.
                     </div>
                 </div>
                 
@@ -97,10 +112,47 @@ const fase = ref(0)
 const listados = ref({
     "category": [],
     "enterprice": [],
-    "category_prod": []
+    "category_prod": [],
+    "product": []
 })
 const tipo_categoria = ref("category")
 const menu_lst = ref([])
+
+const filtro = ref("")
+
+
+function encontrado( string1, string2 ){
+    if (string2=='') return true
+
+    for (let i=0; i < string1.length; i++){
+        if (string1[i] == string2[0]){
+            let encontrado = true
+            for (let j=0; j < string2.length; j++){
+                if (string1[i+j] != string2[j]){
+                    encontrado = false
+                    break;
+                }
+            }
+            if (encontrado) return true
+        }
+    }
+    
+    return false
+}
+
+function filtrador(){
+    let aux = []
+
+    for (let c=0; c < listados.value["product"].length; c++){
+        let producto = listados.value["product"][c]
+        let insertar    = false
+
+        insertar = encontrado( String(producto.nombre).toLowerCase(), String(filtro.value).toLowerCase() )
+        if (insertar) aux.push(producto)
+    }
+    
+    menu_lst.value = aux
+}
 
 onMounted(async ()=>{
     storeApp.loading = true
