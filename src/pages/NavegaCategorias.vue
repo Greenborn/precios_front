@@ -21,11 +21,48 @@
                 <div class="row">
                     <div class="col-12 col-sm-6 col-lg-4" v-for="cat in menu_lst" :key="cat">
                         
-                        <div class="card text-bg-success mb-3 category_btn" style="height: 10rem;" @click="categoria_click(cat)">
+                        <div v-if="fase < 3"
+                            class="card text-bg-success mb-3 category_btn" style="height: 10rem;" 
+                            @click="categoria_click(cat)">
                             <div class="card-body text-center">
                                 <div class="row align-items-center justify-content-center">
                                     <div class="col">
                                         <h3><b>{{ cat.nombre }}</b></h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="fase == 3" 
+                            class="card text-bg-secundary mb-3" style="height: 20rem;" 
+                        >
+                            <div class="card-body text-center">
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col">
+                                        <b>{{ cat.name }}</b>
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col" >
+
+                                        <ul class="list-group">
+                                            <li class="list-group-item" v-for="precio in cat.precios" :key="precio">
+                                                <div class="row">
+
+                                                    <div class="col">
+                                                        <b>${{ formatMoney(precio?.price) }}</b> <br>
+                                                        <small>{{ formateaFecha(precio?.date_time) }}</small>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        {{ precio?.branch?.enterprise?.name }}
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+
                                     </div>
                                 </div>
                             </div>
@@ -46,13 +83,14 @@ import { AppStore } from "../stores/app"
 import PublicTopBar from "../components/publico/PublicTopBar.vue";
 
 import { get_categorias, get_empresas_categoria, get_categorias_empresa, get_productos } from '../api/public/publicEndpoints'
-
+import { formatMoney, fechaDateToString } from '../helpers/formatter'
 const storeApp = AppStore()
 
 const bread_crumbs = ref([
-    { label: 'Tipo de Comercio', visible:0, tipo_cat: "category" },
-    { label: 'Comercio', visible:1, tipo_cat: "enterprice" },
-    { label: 'Categoría',  visible:2, tipo_cat: "category_prod" },
+    { label: 'Tipos de Comercios', visible:0, tipo_cat: "category" },
+    { label: 'Comercios', visible:1, tipo_cat: "enterprice" },
+    { label: 'Categorías',  visible:2, tipo_cat: "category_prod" },
+    { label: 'Productos',  visible:3, tipo_cat: "product" },
 ])
 const fase = ref(0)
 
@@ -84,6 +122,14 @@ function breadcrumb_click( bc ){
     tipo_categoria.value = bc.tipo_cat
     fase.value           = bc.visible
 }
+
+function formateaFecha( fecha ){
+    fecha = new Date(fecha)
+    fecha.setHours(fecha.getHours() - 3)
+    
+    return fechaDateToString(fecha,"/")
+}
+
 
 async function categoria_click( cat ){
     if (tipo_categoria.value == "category"){
@@ -146,8 +192,8 @@ async function categoria_click( cat ){
                 products_lst.push(item)
             }
 
-            tipo_categoria.value = "category_prod"
-            fase.value = 2
+            tipo_categoria.value = "product"
+            fase.value = 3
             menu_lst.value = products_lst
             listados.value[tipo_categoria.value] = products_lst
         } else
