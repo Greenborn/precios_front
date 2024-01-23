@@ -21,6 +21,10 @@ export function get_categorias() {
   return request({ url: '/publico/categorias/all', method: 'get' })
 }
 
+export function get_sub_categorias( cat_menu_id ) {
+  return request({ url: '/publico/categorias/get_sub_categorias?cat_menu_id='+cat_menu_id, method: 'get' })
+}
+
 export function get_empresas_categoria( menu_category_id ) {
   return request({ url: '/publico/categorias/get_empresas_categoria?menu_category_id='+menu_category_id, method: 'get' })
 }

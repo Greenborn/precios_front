@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <div v-if="fase == 3" class="row align-items-center justify-content-center">
+                <div v-if="fase == 2" class="row align-items-center justify-content-center">
                     <div class="col-auto">
                         <div class="row g-3 align-items-center">
                             <div class="col-auto">
@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-6 col-lg-4" v-for="cat in menu_lst" :key="cat">
                         
-                        <div v-if="fase < 3"
+                        <div v-if="fase < 2"
                             class="card text-bg-success mb-3 category_btn" style="height: 10rem;" 
                             @click="categoria_click(cat)">
                             <div class="card-body text-center">
@@ -46,7 +46,7 @@
                             </div>
                         </div>
 
-                        <div v-if="fase == 3" 
+                        <div v-if="fase == 2" 
                             class="card text-bg-secundary mb-3" style="height: 20rem; overflow-y: scroll;" 
                         >
                             <div class="card-header text-center">
@@ -97,21 +97,21 @@ import { ref, onMounted } from 'vue'
 import { AppStore } from "../stores/app"
 import PublicTopBar from "../components/publico/PublicTopBar.vue";
 
-import { get_categorias, get_empresas_categoria, get_categorias_empresa, get_productos } from '../api/public/publicEndpoints'
+import { get_categorias, get_empresas_categoria, get_sub_categorias, get_categorias_empresa, get_productos } from '../api/public/publicEndpoints'
 import { formatMoney, fechaDateToString } from '../helpers/formatter'
 const storeApp = AppStore()
 
 const bread_crumbs = ref([
-    { label: 'Tipos de Comercios', visible:0, tipo_cat: "category" },
-    { label: 'Comercios', visible:1, tipo_cat: "enterprice" },
-    { label: 'Categorías',  visible:2, tipo_cat: "category_prod" },
-    { label: 'Productos',  visible:3, tipo_cat: "product" },
+    { label: 'Tipos de Comercios', label_bk: 'Tipos de Comercios', visible:0, tipo_cat: "category" },
+    //{ label: 'Comercios', label_bk: 'Tipos de Comercios', visible:1, tipo_cat: "enterprice" },
+    { label: 'Categorías', label_bk: 'Tipos de Comercios',  visible:1, tipo_cat: "category_prod" },
+    { label: 'Productos', label_bk: 'Tipos de Comercios',  visible:2, tipo_cat: "product" },
 ])
 const fase = ref(0)
 
 const listados = ref({
     "category": [],
-    "enterprice": [],
+    //"enterprice": [],
     "category_prod": [],
     "product": []
 })
@@ -173,6 +173,7 @@ function breadcrumb_click( bc ){
     menu_lst.value       = listados.value[ bc.tipo_cat ]
     tipo_categoria.value = bc.tipo_cat
     fase.value           = bc.visible
+    bc.label             = bc.label_bk
 }
 
 function formateaFecha( fecha ){
@@ -186,7 +187,7 @@ function formateaFecha( fecha ){
 async function categoria_click( cat ){
     if (tipo_categoria.value == "category"){
         storeApp.loading = true
-        let res = await get_empresas_categoria( cat.id )
+        let res = await get_sub_categorias( cat.id )
         if (res){
             storeApp.loading = false
             if (!res.stat){
@@ -195,16 +196,18 @@ async function categoria_click( cat ){
             }
             let enterprise_lst = res?.items
             for ( let i = 0; i < enterprise_lst.length; i++ )
-                enterprise_lst[i]['nombre'] = enterprise_lst[i]['enterprice']['name']
+                enterprise_lst[i]['nombre'] = enterprise_lst[i]['category']['name']
             
-            tipo_categoria.value = "enterprice"
+            tipo_categoria.value = "category_prod"
             fase.value = 1
+            
+            bread_crumbs.value[fase.value-1].label = cat.nombre
             listados.value[tipo_categoria.value] = enterprise_lst
             menu_lst.value = enterprise_lst
         } else
             storeApp.loading = false
     } 
-    
+    /*
     else if (tipo_categoria.value == "enterprice"){
         storeApp.loading = true
         let res = await get_categorias_empresa( cat?.enterprice?.id )
@@ -221,10 +224,11 @@ async function categoria_click( cat ){
             tipo_categoria.value = "category_prod"
             fase.value = 2
             menu_lst.value = enter_cat_lst
+            bread_crumbs.value[fase.value-1].label = cat.nombre
             listados.value[tipo_categoria.value] = enter_cat_lst
         } else
             storeApp.loading = false
-    } 
+    } */
 
     else if (tipo_categoria.value == "category_prod"){
         storeApp.loading = true
@@ -245,8 +249,9 @@ async function categoria_click( cat ){
             }
 
             tipo_categoria.value = "product"
-            fase.value = 3
+            fase.value = 2
             menu_lst.value = products_lst
+            bread_crumbs.value[fase.value-1].label = cat.nombre
             listados.value[tipo_categoria.value] = products_lst
         } else
             storeApp.loading = false
