@@ -40,7 +40,7 @@
       
       
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto p-3">
+        <ul class="navbar-nav ml-auto p-3 align-items-center justify-content-center">
           <li class="nav-item" v-for="(enlace) in enlaces" :key="enlace">
             <span class="nav-link" @click="click(enlace)"
                 :class="{ active: storeApp.ruta_actual.path == enlace.path }">{{ enlace.title }}</span>
@@ -69,7 +69,8 @@ const enlaces = ref([
     { path: '/carga_precio', title: 'Carga de Precios' },
     { path: '/categorias', title: 'Navegar por Categorías' },
     { path: '/estadisticas', title: 'Estadísticas' },
-    { path: '/novedades', title: 'Novedades' }
+    //{ path: '/calcula_trueque', title: 'Calcula Trueque' },
+    //{ path: '/novedades', title: 'Novedades' }
 ])
 
 function click( item ){

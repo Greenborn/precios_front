@@ -30,6 +30,11 @@ export const routes = [
     component: () => import("./pages/EstadisticasGenerales.vue"),
   },
   {
+    path: "/calcula_trueque",
+    name: "calcula_trueque",
+    component: () => import("./pages/CalculadoraTrueque.vue"),
+  },
+  {
     path: "/admin/login",
     name: "login_admin",
     component: () => import("./pages/LoginAdmin.vue"),

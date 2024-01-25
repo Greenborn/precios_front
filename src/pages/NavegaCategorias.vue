@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <div v-if="fase == 2" class="row align-items-center justify-content-center">
+                <div class="row align-items-center justify-content-center">
                     <div class="col-auto">
                         <div class="row g-3 align-items-center">
                             <div class="col-auto">
@@ -104,8 +104,8 @@ const storeApp = AppStore()
 const bread_crumbs = ref([
     { label: 'Tipos de Comercios', label_bk: 'Tipos de Comercios', visible:0, tipo_cat: "category" },
     //{ label: 'Comercios', label_bk: 'Tipos de Comercios', visible:1, tipo_cat: "enterprice" },
-    { label: 'Categorías', label_bk: 'Tipos de Comercios',  visible:1, tipo_cat: "category_prod" },
-    { label: 'Productos', label_bk: 'Tipos de Comercios',  visible:2, tipo_cat: "product" },
+    { label: 'Categorías', label_bk: 'Categorías',  visible:1, tipo_cat: "category_prod" },
+    { label: 'Productos', label_bk: 'Productos',  visible:2, tipo_cat: "product" },
 ])
 const fase = ref(0)
 
@@ -143,8 +143,8 @@ function encontrado( string1, string2 ){
 function filtrador(){
     let aux = []
 
-    for (let c=0; c < listados.value["product"].length; c++){
-        let producto = listados.value["product"][c]
+    for (let c=0; c < listados.value[tipo_categoria.value].length; c++){
+        let producto = listados.value[tipo_categoria.value][c]
         let insertar    = false
 
         insertar = encontrado( String(producto.nombre).toLowerCase(), String(filtro.value).toLowerCase() )
