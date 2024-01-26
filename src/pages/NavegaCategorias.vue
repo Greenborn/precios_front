@@ -1,5 +1,5 @@
 <template>
-    <PublicTopBar />
+    <PublicTopBar @filtrar_evnt="filtrar" />
 
     <div class="container-fluid" id="categorias-cnt">
         <div class="row align-items-center justify-content-center">
@@ -15,19 +15,6 @@
                                 </li>
                             </ol>
                         </nav>
-                    </div>
-                </div>
-
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-auto">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-auto">
-                                <label for="filter" class="col-form-label">Filtrar</label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="text" v-model="filtro" id="filter" class="form-control" @keyup="filtrador" >
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -140,6 +127,11 @@ function encontrado( string1, string2 ){
     return false
 }
 
+function filtrar( termino_filtro ){
+    filtro.value = termino_filtro
+    filtrador()
+}
+
 function filtrador(){
     let aux = []
 
@@ -185,6 +177,7 @@ function formateaFecha( fecha ){
 
 
 async function categoria_click( cat ){
+    filtro.value = ""
     if (tipo_categoria.value == "category"){
         storeApp.loading = true
         let res = await get_sub_categorias( cat.id )

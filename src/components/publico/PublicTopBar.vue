@@ -37,6 +37,17 @@
         </div>
       </div>
 
+      <div class="d-flex" v-if="storeApp.ruta_actual.path == '/categorias'">
+        <div class="w-100" id="cont_busca">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-auto p-0 mr-1">
+              <input class="form-control me-2" v-model="termino_filtro" type="text" placeholder="Filtrar" aria-label="Filtrar" 
+              @keyup="filtrar" ref="caja_busqueda">
+            </div>
+          </div>
+        </div>
+      </div>
+
       
       
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -57,12 +68,13 @@ import { ref, onMounted } from 'vue'
 import { AppStore } from "../../stores/app"
 import { useRouter, useRoute } from 'vue-router'
 
-const emit  = defineEmits(['buscar_evnt', 'agregar_evnt'])
+const emit  = defineEmits(['buscar_evnt', 'agregar_evnt', 'filtrar_evnt'])
 const storeApp = AppStore()
 const router = useRouter()
 const route = useRoute()
 
 const termino_busqueda = ref('')
+const termino_filtro = ref('')
 
 const enlaces = ref([
     { path: '/', title: 'Buscador' },
@@ -76,6 +88,10 @@ const enlaces = ref([
 function click( item ){
     storeApp.ruta_actual = item
     router.push(item.path)
+}
+
+function filtrar(){
+  emit('filtrar_evnt', termino_filtro.value)
 }
 
 function buscar(){
