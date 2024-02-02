@@ -43,7 +43,8 @@
                                     </div>
                                     <div class="col-12 col-sm product-name-cont">
                                         {{ resultado?.products?.name }}
-                                        <small v-if="resultado?.url"><a :href="resultado?.url" target="_blank">ir a web</a></small>
+                                        <small v-if="resultado?.url"><a :href="resultado?.url" target="_blank">IR A WEB</a></small>
+                                        &nbsp;<small class="btn-corregir" @click="corregir_precio(resultado)">CLICK para CORREGIR</small>
                                     </div>
                                 </div>
                                 
@@ -153,6 +154,7 @@ import { formatMoney, fechaDateToString } from '../../helpers/formatter'
 import { AppStore } from "../../stores/app"
 
 import GraficoEvolucionPrecio from './GraficoEvolucionPrecio.vue'
+import FormularioAddPrecio from './FormularioAddPrecio.vue'
 
 defineExpose({ buscar })
 const storeApp = AppStore()
@@ -210,6 +212,7 @@ async function buscar ( termino = undefined ) {
             behavior: 'smooth'
         })
         resultados.value = res?.items ? res.items: [];
+        resultados.value.sort( (a, b) => (a.confiabilidad < b.confiabilidad) ? 1 : -1 )
         return true
     } else {
         storeApp.loading = false
@@ -242,6 +245,16 @@ async function cargar_estadisticas(){
         storeApp.loading = false
 }
 
+function corregir_precio(resultado){
+    let modal_form = storeApp.mostrar_modal(FormularioAddPrecio, 'Corregir precio - '+resultado?.products?.name,
+        {
+            'item': resultado,
+            _callback_ok: async () => {
+                storeApp.ocultar_modal( modal_form.code )
+            }
+        },
+    )
+}
 
 
 onMounted(async ()=>{
@@ -251,6 +264,12 @@ onMounted(async ()=>{
 </script>
 
 <style>
+.btn-corregir{
+    font-weight: bolder;
+    color: #82321e;
+    cursor: pointer;
+}
+
 .price-cont{
     color:rgb(70, 116, 0);
     font-weight: bolder;

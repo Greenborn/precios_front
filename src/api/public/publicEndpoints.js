@@ -36,3 +36,7 @@ export function get_categorias_empresa( enterprise_id ) {
 export function get_productos( category_id ) {
   return request({ url: '/publico/productos/all?category_id='+category_id, method: 'get' })
 }
+
+export function cargar_nuevo_precio( data ) {
+  return request({ url: '/publico/productos/cargar_nuevo_precio', method: 'put',  data:data })
+}

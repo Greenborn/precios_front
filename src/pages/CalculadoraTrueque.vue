@@ -81,7 +81,7 @@
                         
                         <div class="card text-bg-secundary">
                             <div class="card-header text-center">
-                                <h4><b>Producto 1 - {{elegidos[1]?.price}}</b></h4>
+                                <h4><b>Producto 2 - {{elegidos[1]?.price}}</b></h4>
                             </div>
                             
                             <div class="card-body text-center">
