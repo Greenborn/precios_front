@@ -44,7 +44,7 @@
                             </div>
                         </div>
                     </div>
-
+<!--
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                     </div>
-                    
+                    -->
                 </div>
 
             </div>

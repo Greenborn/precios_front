@@ -39,7 +39,7 @@
                                 <div class="row align-items-center justify-content-center">
                                     <div class="col-12 col-sm-4">
                                         <p class="price-cont mb-0">$ {{ formatMoney(resultado?.price) }}</p>
-                                        <b><small>{{ formateaFecha(resultado?.date_time) }}</small></b>
+                                        <b><small>{{ formateaFecha(resultado?.time) }}</small></b>
                                     </div>
                                     <div class="col-12 col-sm product-name-cont">
                                         {{ resultado?.products?.name }}
@@ -221,10 +221,10 @@ async function buscar ( termino = undefined ) {
 }
 
 function formateaFecha( fecha ){
-    fecha = new Date(fecha)
-    fecha.setHours(fecha.getHours() - 3)
+    //fecha = new Date(fecha)
+    //fecha.setHours(fecha.getHours() - 3)
     
-    return fechaDateToString(fecha,"/")
+    return fechaDateToString(new Date(fecha),"/", "dd-mm-YYYY H:M" )
 }
 
 async function hacer_busqueda(){
