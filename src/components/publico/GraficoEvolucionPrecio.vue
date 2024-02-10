@@ -50,6 +50,16 @@ function insertar_ordenado( array_, elemento, campo = 'price' ){
   return array_
 }
 
+
+function formateaFecha( fecha, time ){
+    let hora = new Date(time)
+    fecha = new Date(fecha)
+    console.log(fecha, hora)
+    fecha.setHours(hora.getHours(), hora.getMinutes(), hora.getSeconds())
+    
+    return fechaDateToString(new Date(fecha),"/", "dd-mm-YYYY H:M" )
+}
+
 onMounted(() => {
     let labels = []
 
@@ -57,9 +67,9 @@ onMounted(() => {
     let resultados = props.parametros.resultados['items']
 
     for (let i = 0; i < resultados.length; i++){
-        let fecha = new Date(resultados[i].date_time)
-        resultados[i]['date_time'] = fecha.getTime()
-        precios = insertar_ordenado(precios, resultados[i], 'date_time')
+        let fecha = new Date(resultados[i].time)
+        resultados[i]['time'] = fecha.getTime()
+        precios = insertar_ordenado(precios, resultados[i], 'time')
     }
 
     let data_set = []
@@ -68,7 +78,7 @@ onMounted(() => {
     for (let i = 0; i < precios.length; i++){
         if ( fecha_existe[precios[i]['date_time']] == undefined){
             fecha_existe[precios[i]['date_time']] = true
-            labels.push( fechaDateToString( new Date( precios[i]['date_time'] ), "/", 'dd-mm-YYYY H:M' ) )
+            labels.push( formateaFecha( precios[i].date_time, precios[i].time ) )
             aux_fechas.push( precios[i]['date_time'] )
             data_set.push( precios[i].price )
         }
