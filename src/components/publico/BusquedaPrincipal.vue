@@ -211,8 +211,46 @@ async function buscar ( termino = undefined ) {
             top: 0,
             behavior: 'smooth'
         })
+
         resultados.value = res?.items ? res.items: [];
-        resultados.value.sort( (a, b) => (a.confiabilidad < b.confiabilidad) ? 1 : -1 )
+
+        //agrupando por confiabilidad y fecha
+        let diccio_ = {}
+        for (let i = 0; i < resultados.value.length; i++){
+            const item = resultados.value[i]
+            const fecha = new Date( item.date_time ).getTime()
+
+            if (diccio_[ item.confiabilidad ] == undefined)
+                diccio_[ item.confiabilidad ] = {}
+
+            if (diccio_[ item.confiabilidad ][ fecha ] == undefined)
+                diccio_[ item.confiabilidad ][ fecha ] = []
+            
+            diccio_[ item.confiabilidad ][ fecha ].push( item )
+        }
+        
+        //Se ordenan las claves de los diccionarios
+        let confia_keys = Object.keys( diccio_ )
+        confia_keys.sort( (a, b) => (a > b) ? 1 : -1 )
+
+        let diccio_date_k = {}
+        for (let i = 0; i < confia_keys.length; i++){
+            diccio_date_k[ confia_keys[i] ] = Object.keys( diccio_[ confia_keys[i] ] )
+            diccio_date_k[ confia_keys[i] ].sort( (a, b) => (a < b) ? 1 : -1 )
+        }
+
+        //Se genera nuevo arreglo de resultados ordenado
+        let aux = []
+        for (let i = 0; i < confia_keys.length; i++)
+            for (let j=0; j < diccio_date_k[ confia_keys[i] ].length; j ++) {
+                let aux_1 = diccio_[ confia_keys[i] ][ diccio_date_k[ confia_keys[i] ][j] ]
+                aux_1.sort( (a, b) => (a.price > b.price) ? 1 : -1 )
+
+                for (let k = 0; k < aux_1.length; k++ )
+                    aux.push( aux_1[ k ] )
+            }
+
+        resultados.value = aux
         return true
     } else {
         storeApp.loading = false
@@ -223,7 +261,6 @@ async function buscar ( termino = undefined ) {
 function formateaFecha( fecha, time ){
     let hora = new Date(time)
     fecha = new Date(fecha)
-    console.log(fecha, hora)
     fecha.setHours(hora.getHours(), hora.getMinutes(), hora.getSeconds())
     
     return fechaDateToString(new Date(fecha),"/", "dd-mm-YYYY H:M" )
