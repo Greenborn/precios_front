@@ -38,7 +38,7 @@
                             <div class="card-header p-4 pt-0 pb-0">
                                 <div class="row align-items-center justify-content-center">
                                     <div class="col-12 col-sm-4">
-                                        <p class="price-cont mb-0">$ {{ formatMoney(resultado?.price) }}</p>
+                                        <p class="price-cont mb-0">{{ resultado?.tipo == "ALQUILER" ? resultado.moneda : "$" }} {{ formatMoney(resultado?.price) }}</p>
                                         <b><small>{{ formateaFecha(resultado?.date_time, resultado?.time) }}</small></b>
                                     </div>
                                     <div class="col-12 col-sm product-name-cont">
@@ -61,11 +61,18 @@
 
                                         <div class="row">
                                             <div class="col cnt-negocios">
-                                                <div>
+                                                <div v-if="resultado?.tipo != 'ALQUILER'">
                                                     <b>Comercio: &nbsp;</b> {{ resultado?.empresa?.name }} &nbsp; -
                                                     <span v-for="comercio in resultado?.locales" :key="comercio">
                                                         {{ comercio?.address_road }} &nbsp;
                                                         {{ comercio?.address_number }}  &nbsp; |
+                                                    </span>
+                                                </div>
+                                                <div v-if="resultado?.tipo == 'ALQUILER'">
+                                                    <b>Locador: &nbsp;</b> {{ resultado?.empresa?.name }} &nbsp; -
+                                                    <span v-for="_data in get_especificaciones(resultado?.caracteristicas)" :key="_data">
+                                                        {{ _data?.name }} &nbsp;
+                                                        {{ _data?.value }}  &nbsp; |
                                                     </span>
                                                 </div>
                                             </div>
@@ -164,6 +171,18 @@ const resultados = ref([]);
 const estadisticas_inc = ref([])
 const MODAL_STYLE = { width: '100vw', 'min-height': "100vh" }
 
+function get_especificaciones( data ){
+    let aux = []
+    
+    if (data['direccion'] != "")
+        aux.push( { name: "Direccion:", value: data['direccion'] } )
+
+    if (data['ambientes'] != "")
+        aux.push( { name: "Ambientes:", value: data['ambientes'] } )
+
+    return aux
+}
+    
 async function mostrar_estadisticas( item ){
     storeApp.loading = true
     let res = await get_estadistica( "variacion_precio&id_producto="+item.product_id+"&id_local="+item.branch_id );
