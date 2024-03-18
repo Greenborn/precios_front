@@ -82,10 +82,15 @@ const enlaces = ref([
     //{ path: '/categorias', title: 'Navegar por Categorías' },
     { path: '/estadisticas', title: 'Estadísticas' },
     { path: '/calcula_trueque', title: 'Calcula Trueque' },
-    //{ path: '/novedades', title: 'Novedades' }
+    { path: '/aporta', url: "https://cafecito.app/tandil_precios", title: 'Quiero Aportar' }
 ])
 
 function click( item ){
+    if (item?.url){
+      window.open(item.url, '_blank')
+      return
+    }
+
     storeApp.ruta_actual = item
     router.push(item.path)
 }
