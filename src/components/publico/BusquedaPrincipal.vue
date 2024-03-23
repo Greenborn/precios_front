@@ -24,7 +24,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" v-model="solo_ofertas" type="checkbox" value="" id="promoCheck">
                                 <label class="form-check-label" for="promoCheck">
-                                    Solo Promociones y Ofertas
+                                    Buscar Promociones y Ofertas
                                 </label>
                             </div>
                         </div>
@@ -42,25 +42,43 @@
                 <div class="card-header p-4 pb-0">
                     <h4>Resultados</h4>
                 </div>
+
                 <div class="card-body p-4">
+                    <div class="row align-items-center justify-content-center d-sm-none">
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" v-model="solo_ofertas" type="checkbox" value="" id="promoCheck">
+                                <label class="form-check-label" for="promoCheck">
+                                    Buscar Promociones y Ofertas
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                     <template v-if="resultados.length == 0">
                         <div class="alert alert-info">
                             No hay resultados, pruebe con otro término de búsqueda.
                         </div>
                     </template>
                     <template v-if="resultados.length != 0">
+                        
                         <div v-for="resultado in resultados" :key="resultado.producto" class="card mb-1 p-0">
                             <div class="card-header p-4 pt-0 pb-0">
                                 <div class="row align-items-center justify-content-center">
                                     <div class="col-12 col-sm-4">
-                                        <p class="price-cont mb-0">{{ resultado?.tipo == "ALQUILER" ? resultado.moneda : "$" }} {{ formatMoney(resultado?.price) }}</p>
+                                        <p class="price-cont mb-0" v-if="resultado?.price != -1">
+                                            {{ resultado?.tipo == "ALQUILER" ? resultado.moneda : "$" }} {{ formatMoney(resultado?.price) }}
+                                        </p>
+                                        <p class="price-cont mb-0" v-if="resultado?.caracteristicas?.promo_cnt">
+                                            {{ resultado?.caracteristicas?.promo_cnt }}
+                                        </p>
                                         <b><small>{{ formateaFecha(resultado?.date_time, resultado?.time) }}</small></b>
                                     </div>
                                     <div class="col-12 col-sm product-name-cont">
                                         {{ resultado?.products?.name }}
                                         <small v-if="resultado?.url"><a :href="resultado?.url" target="_blank">IR A WEB</a></small>
                                         &nbsp;
-                                        <small v-if="resultado?.tipo != 'ALQUILER'" class="btn-corregir" @click="corregir_precio(resultado)">CLICK para CORREGIR</small>
+                                        <small v-if="resultado?.tipo != 'ALQUILER' && resultado?.tipo != 'PROMO'" class="btn-corregir" @click="corregir_precio(resultado)">CLICK para CORREGIR</small>
                                     </div>
                                 </div>
                                 
@@ -77,7 +95,7 @@
 
                                         <div class="row">
                                             <div class="col cnt-negocios">
-                                                <div v-if="resultado?.tipo != 'ALQUILER' || resultado?.tipo == 'PROMO'">
+                                                <div v-if="resultado?.tipo != 'ALQUILER'">
                                                     <b>Comercio: &nbsp;</b> {{ resultado?.empresa?.name }} &nbsp; -
                                                     <span v-for="comercio in resultado?.locales" :key="comercio">
                                                         {{ comercio?.address_road }} &nbsp;
@@ -96,7 +114,7 @@
                                     </div>
                                     
                                     <div class="col-auto">
-                                        <button v-if="resultado?.tipo != 'ALQUILER'" type="button" class="btn btn-primary" @click="mostrar_estadisticas(resultado)">
+                                        <button v-if="resultado?.tipo != 'ALQUILER' && resultado?.tipo != 'PROMO'" type="button" class="btn btn-primary" @click="mostrar_estadisticas(resultado)">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/>
                                             </svg>
