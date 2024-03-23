@@ -8,13 +8,28 @@
                     <small>Ingrese el nombre del producto que desea consultar:</small>
                 </div>
                 <div class="card-body p-4">
-                    <div class="input-group mb-3">
-                        <input v-model="termino_busqueda" type="text" class="form-control"
-                            placeholder="Nombre del producto" @keyup.enter="hacer_busqueda">
-                        <div class="input-group-append">
-                            <button @click="buscar" class="btn btn-primary" type="button">Buscar</button>
+                    <div class="row align-items-center justify-content-center">
+
+                        <div class="col-12 col-md-8">
+                            <div class="input-group">
+                                <input v-model="termino_busqueda" type="text" class="form-control"
+                                    placeholder="Nombre del producto" @keyup.enter="hacer_busqueda">
+                                <div class="input-group-append">
+                                    <button @click="buscar" class="btn btn-primary" type="button">Buscar</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="col-12 col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" v-model="solo_ofertas" type="checkbox" value="" id="promoCheck">
+                                <label class="form-check-label" for="promoCheck">
+                                    Solo Promociones y Ofertas
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -62,7 +77,7 @@
 
                                         <div class="row">
                                             <div class="col cnt-negocios">
-                                                <div v-if="resultado?.tipo != 'ALQUILER'">
+                                                <div v-if="resultado?.tipo != 'ALQUILER' || resultado?.tipo == 'PROMO'">
                                                     <b>Comercio: &nbsp;</b> {{ resultado?.empresa?.name }} &nbsp; -
                                                     <span v-for="comercio in resultado?.locales" :key="comercio">
                                                         {{ comercio?.address_road }} &nbsp;
@@ -156,7 +171,7 @@
 
 <script setup>
 import { ref, onMounted  } from 'vue'
-import { busqueda, get_estadistica } from '../../api/public/publicEndpoints'
+import { busqueda, busqueda_promociones, get_estadistica } from '../../api/public/publicEndpoints'
 
 import { formatMoney, fechaDateToString } from '../../helpers/formatter'
 import { AppStore } from "../../stores/app"
@@ -168,6 +183,7 @@ defineExpose({ buscar })
 const storeApp = AppStore()
 
 const termino_busqueda = ref('')
+const solo_ofertas = ref(false)
 const resultados = ref([]);
 const estadisticas_inc = ref([])
 const MODAL_STYLE = { width: '100vw', 'min-height': "100vh" }
@@ -203,6 +219,11 @@ async function mostrar_estadisticas( item ){
     }
 }
 
+const FUNCION_BUSQUEDA = {
+    'promociones': busqueda_promociones,
+    'general': busqueda
+}
+
 async function buscar ( termino = undefined ) {
     if (termino != undefined && typeof termino == 'string')
         termino_busqueda.value = termino
@@ -219,7 +240,7 @@ async function buscar ( termino = undefined ) {
 
     resultados.value = []
     storeApp.loading = true
-    let res = await busqueda(termino_busqueda.value);
+    let res = await FUNCION_BUSQUEDA[ solo_ofertas.value ? 'promociones' : 'general' ](termino_busqueda.value);
     if (res) {
         storeApp.loading = false
         if (res?.error){

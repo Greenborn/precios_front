@@ -4,6 +4,9 @@ const request = create(import.meta.env.VITE_APP_BACKEND_ADMIN, false)
 export function busqueda( termino ) {
   return request({ url: '/publico/busqueda/precios?product_name='+encodeURI(termino), method: 'get' })
 }
+export function busqueda_promociones( termino ) {
+  return request({ url: '/publico/busqueda/promociones?product_name='+encodeURI(termino), method: 'get' })
+}
 
 export function public_news() {
   return request({ url: '/public-news', method: 'get' })
