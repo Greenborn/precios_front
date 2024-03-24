@@ -69,7 +69,9 @@
                                         <p class="price-cont mb-0" v-if="resultado?.price != -1">
                                             {{ resultado?.tipo == "ALQUILER" ? resultado.moneda : "$" }} {{ formatMoney(resultado?.price) }}
                                         </p>
-                                        <p class="price-cont mb-0" v-if="resultado?.caracteristicas?.promo_cnt">
+                                        <p class="price-cont mb-0" 
+                                            v-if="resultado?.caracteristicas?.promo_cnt 
+                                                    && resultado?.price == -1">
                                             {{ resultado?.caracteristicas?.promo_cnt }}
                                         </p>
                                         <b><small>{{ formateaFecha(resultado?.date_time, resultado?.time) }}</small></b>
@@ -87,9 +89,15 @@
                                 <div class="row align-items-center justify-content-center">
 
                                     <div class="col">
-                                        <div class="row" v-if="resultado?.notas != '' && resultado?.notas != null">
+                                        <div class="row" 
+                                            v-if="resultado?.notas != '' && resultado?.notas != null
+                                                    || resultado?.caracteristicas?.desde || resultado?.caracteristicas?.hasta">
                                             <div class="col">
-                                                <span class="text-success"><b>{{ resultado?.notas }}</b></span>
+                                                <span class="text-success">
+                                                    <b>{{ resultado?.notas }}</b>
+                                                    <b v-if="resultado?.caracteristicas?.desde">Desde: {{ resultado?.caracteristicas?.desde }}</b>
+                                                    <b v-if="resultado?.caracteristicas?.hasta"> - Hasta: {{ resultado?.caracteristicas?.hasta }}</b>
+                                                </span>
                                             </div>
                                         </div>
 
