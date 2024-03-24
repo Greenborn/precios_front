@@ -40,7 +40,14 @@
             <div class="card mb-1 p-0">
 
                 <div class="card-header p-4 pb-0">
-                    <h4>Resultados</h4>
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col p-0 pl-2">
+                            <h4>
+                                Resultados
+                                <small v-if="resultados?.length"> - {{ resultados.length }}</small>
+                            </h4>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body p-4">
@@ -74,7 +81,9 @@
                                                     && resultado?.price == -1">
                                             {{ resultado?.caracteristicas?.promo_cnt }}
                                         </p>
-                                        <b><small>{{ formateaFecha(resultado?.date_time, resultado?.time) }}</small></b>
+                                        <b v-if='resultado?.tipo != "PROMO"'>
+                                            <small>{{ formateaFecha(resultado?.date_time, resultado?.time) }}</small>
+                                        </b>
                                     </div>
                                     <div class="col-12 col-sm product-name-cont">
                                         {{ resultado?.products?.name }}
