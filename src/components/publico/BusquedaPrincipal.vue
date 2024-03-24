@@ -22,7 +22,7 @@
 
                         <div class="col-12 col-md-4">
                             <div class="form-check">
-                                <input class="form-check-input" v-model="solo_ofertas" type="checkbox" value="" id="promoCheck">
+                                <input class="form-check-input" @change="ofertas_check_change" v-model="solo_ofertas" type="checkbox" value="" id="promoCheck">
                                 <label class="form-check-label" for="promoCheck">
                                     Buscar Promociones y Ofertas
                                 </label>
@@ -47,7 +47,7 @@
                     <div class="row align-items-center justify-content-center d-sm-none">
                         <div class="col-12">
                             <div class="form-check">
-                                <input class="form-check-input" v-model="solo_ofertas" type="checkbox" value="" id="promoCheck">
+                                <input class="form-check-input" @change="ofertas_check_change" v-model="solo_ofertas" type="checkbox" value="" id="promoCheck">
                                 <label class="form-check-label" for="promoCheck">
                                     Buscar Promociones y Ofertas
                                 </label>
@@ -205,6 +205,12 @@ const solo_ofertas = ref(false)
 const resultados = ref([]);
 const estadisticas_inc = ref([])
 const MODAL_STYLE = { width: '100vw', 'min-height': "100vh" }
+
+async function ofertas_check_change(){
+    if (termino_busqueda.value != '' && termino_busqueda.value?.length >= 3){
+        await buscar(termino_busqueda.value)
+    }
+}
 
 function get_especificaciones( data ){
     let aux = []
