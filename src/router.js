@@ -25,6 +25,11 @@ export const routes = [
     component: () => import("./pages/NavegaCategorias.vue"),
   },
   {
+    path: "/ofertas",
+    name: "listado_ofertas",
+    component: () => import("./pages/ListadoOfertas.vue"),
+  },
+  {
     path: "/estadisticas",
     name: "estadisticas",
     component: () => import("./pages/EstadisticasGenerales.vue"),
