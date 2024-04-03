@@ -18,7 +18,7 @@
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" 
                                     :data-bs-target="'#collapse'+index" aria-expanded="false" :aria-controls="'collapse' + index">
-                                <b>{{ comercio?.empresa?.name }}</b>
+                                <b>{{ comercio?.empresa?.name }} - {{ ofertas_filtradas[comercio.id].ofertas?.length }}</b>
                             </button>
                         </h2>
                         <div :id="'collapse' + index" class="accordion-collapse collapse" :data-bs-parent="'#collapse'+index">
@@ -26,7 +26,7 @@
 
                                 <ul class="list-group">
                                     <li class="list-group-item" 
-                                        v-for="(oferta) in listado_por_comercio[comercio.id].ofertas" :key="oferta">
+                                        v-for="(oferta) in ofertas_filtradas[comercio.id].ofertas" :key="oferta">
                                         <div class="row align-items-center justify-content-center">
                                             <div class="col-12 col-sm-4 text-center">
                                                 <p class="price-cont mb-0" v-if="oferta?.price != -1">
@@ -55,7 +55,6 @@
 
             </div>
         </div>
-
     </div>
 </template>
     
@@ -77,18 +76,20 @@
 
     const listado_comercios = ref([])
     const params_filtro = ref({
-        comercio: {}, nombre_prod: null
+        comercio: {}, nombre_prod: ""
     })
     const comercios_filtrados = ref([])
+    const ofertas_filtradas = ref([])
 
     function desplegar_filtros(){
         let modal_form = storeApp.mostrar_modal(FormularioFiltroOferta, 'Filtrar por ',
                             {
                                 'params_filtro':     params_filtro.value,
                                 'listado_comercios': listado_comercios.value,
-                                _callback_ok: async ( filtro_ ) => {
+                                _callback_ok: ( filtro_ ) => {
                                     filtrar_ofertas( filtro_ )
                                     storeApp.ocultar_modal( modal_form.code )
+                                    return
                                 }
                             },
                         )
@@ -96,15 +97,16 @@
 
     function filtrar_ofertas( filtro_ ){
         params_filtro.value = filtro_
+
+        //Filtrado por comercio
         let keys = Object.keys( params_filtro.value.comercio )
         let aux = []
-
         for (let i=0; i < keys.length; i++){
             if (params_filtro.value.comercio[keys[i]]){
                 
                 for (let j=0; j < listado_empresas.value.length; j++){
-                    if (keys[i] == listado_empresas.value[j].id){
-                        aux.push(listado_empresas.value[j])
+                    if (keys[i] == listado_empresas.value[j].id){                        
+                        aux.push( {...listado_empresas.value[j]} )
                         break
                     }
                 }
@@ -112,8 +114,47 @@
             
         }
 
-        if (aux.length == 0) aux = listado_empresas.value
+        if (aux.length == 0){ 
+            aux = [...listado_empresas.value]
+        }
+
+        //filtrado por nombre de oferta
+        for (let i=0; i < aux.length; i++){
+            ofertas_filtradas.value[ aux[i].id ].ofertas = []
+            let ofertas_comercio = listado_por_comercio.value[ aux[i].id ].ofertas           
+            let prd_filtrado = []                     
+
+            for (let k=0; k < ofertas_comercio.length; k++){
+                if (
+                    encontrado( String(ofertas_comercio[k]?.products?.name).toLowerCase(), 
+                                String(params_filtro.value.nombre_prod).toLowerCase() )
+                ) {
+                    prd_filtrado.push( {...ofertas_comercio[k]} )
+                }
+            }
+            ofertas_filtradas.value[ aux[i].id ].ofertas = prd_filtrado
+        }
+
         comercios_filtrados.value = aux
+    }
+
+    function encontrado( string1, string2 ){
+        if (string2=='') return true
+
+        for (let i=0; i < string1.length; i++){
+            if (string1[i] == string2[0]){
+                let encontrado = true
+                for (let j=0; j < string2.length; j++){
+                    if (string1[i+j] != string2[j]){
+                        encontrado = false
+                        break;
+                    }
+                }
+                if (encontrado) return true
+            }
+        }
+        
+        return false
     }
 
     onMounted(async ()=>{
@@ -126,7 +167,7 @@
                 return false
             }
             listado_comercios.value = res_comercios?.items
-            console.log(listado_comercios.value)
+            listado_comercios.value.sort( (a, b) => (a?.name > b?.name) ? 1 : -1 )
         }
 
         storeApp.loading = true
@@ -139,23 +180,28 @@
             }
             listado_promo_obtenido.value = res?.items
             for (let i=0; i < listado_promo_obtenido.value.length; i++){
-                if (listado_por_comercio.value[listado_promo_obtenido.value[i].branch_id] === undefined){
-                    listado_por_comercio.value[listado_promo_obtenido.value[i].branch_id] = {
+                const ID_COMERCIO = listado_promo_obtenido.value[i].branch_id
+                if (listado_por_comercio.value[ID_COMERCIO] === undefined){
+                    listado_por_comercio.value[ID_COMERCIO] = {
                         "ofertas": []
                     }
                     listado_empresas.value.push({
-                        "id":      listado_promo_obtenido.value[i].branch_id,
+                        "id":      ID_COMERCIO,
                         "empresa": listado_promo_obtenido.value[i].empresa,
                         "locales": listado_promo_obtenido.value[i].locales,
                     })
+                    params_filtro.value.comercio[ID_COMERCIO] = true
                 }
-                listado_por_comercio.value[listado_promo_obtenido.value[i].branch_id].ofertas.push(listado_promo_obtenido.value[i])
+                listado_por_comercio.value[ID_COMERCIO].ofertas.push(listado_promo_obtenido.value[i])
             }
+            listado_empresas.value.sort( (a, b) => (a.empresa?.name > b.empresa?.name) ? 1 : -1 )
             comercios_filtrados.value = listado_empresas.value
 
             for (let i=0; i < listado_empresas.value.length; i++){
                 listado_por_comercio.value[listado_empresas.value[i].id]?.ofertas.sort( (a, b) => (a.price > b.price) ? 1 : -1 )
             }
+
+            ofertas_filtradas.value = JSON.parse(JSON.stringify(listado_por_comercio.value))
         } else
             storeApp.loading = false
     })

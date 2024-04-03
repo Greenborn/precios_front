@@ -59,7 +59,14 @@
 
     function cancelar(){ storeApp.ocultar_modal( props.parametros._modal_cod ) }
     
-    async function filtrar(){
+    function filtrar(){
+        let aux = {}
+        let keys_comercios = Object.keys( modelo.value.comercio )
+        for (let i=0; i < keys_comercios.length; i++)
+            if (modelo.value.comercio[keys_comercios[i]])
+                aux[keys_comercios[i]] = true
+            
+        modelo.value.comercio = aux
         props.parametros._callback_ok( modelo.value )
     }
 </script>
