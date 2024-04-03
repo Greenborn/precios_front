@@ -76,27 +76,31 @@
     const listado_empresas = ref([])
 
     const listado_comercios = ref([])
-    
+    const params_filtro = ref({
+        comercio: {}, nombre_prod: null
+    })
     const comercios_filtrados = ref([])
 
     function desplegar_filtros(){
         let modal_form = storeApp.mostrar_modal(FormularioFiltroOferta, 'Filtrar por ',
                             {
+                                'params_filtro':     params_filtro.value,
                                 'listado_comercios': listado_comercios.value,
-                                _callback_ok: async ( params_filtro ) => {
-                                    filtrar_ofertas( params_filtro )
+                                _callback_ok: async ( filtro_ ) => {
+                                    filtrar_ofertas( filtro_ )
                                     storeApp.ocultar_modal( modal_form.code )
                                 }
                             },
                         )
     }
 
-    function filtrar_ofertas( params_filtro ){
-        let keys = Object.keys( params_filtro.comercio )
+    function filtrar_ofertas( filtro_ ){
+        params_filtro.value = filtro_
+        let keys = Object.keys( params_filtro.value.comercio )
         let aux = []
 
         for (let i=0; i < keys.length; i++){
-            if (params_filtro.comercio[keys[i]]){
+            if (params_filtro.value.comercio[keys[i]]){
                 
                 for (let j=0; j < listado_empresas.value.length; j++){
                     if (keys[i] == listado_empresas.value[j].id){
@@ -108,6 +112,7 @@
             
         }
 
+        if (aux.length == 0) aux = listado_empresas.value
         comercios_filtrados.value = aux
     }
 

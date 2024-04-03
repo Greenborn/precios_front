@@ -55,9 +55,7 @@
         name: "Todas"
     }])
     opc_comercios_s.value.push( props.parametros.listado_comercios )
-    const modelo = ref({
-        comercio: {}, nombre_prod: null
-    })
+    const modelo = ref( props.parametros?.params_filtro )
 
     function cancelar(){ storeApp.ocultar_modal( props.parametros._modal_cod ) }
     
