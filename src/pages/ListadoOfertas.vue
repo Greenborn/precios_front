@@ -23,9 +23,11 @@
 
                     <div class="accordion-item" v-for="(comercio, index) in comercios_filtrados" :key="comercio">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" 
-                                    :data-bs-target="'#collapse'+index" aria-expanded="false" :aria-controls="'collapse' + index">
-                                <b>{{ comercio?.empresa?.name }} - {{ ofertas_filtradas[comercio.id].ofertas?.length }}</b>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                    :data-bs-target="'#collapse'+index" aria-expanded="false" :aria-controls="'collapse' + index"
+                                    >
+                                <b>{{ comercio?.empresa?.name }} - 
+                                    {{ ofertas_filtradas[comercio.id].ofertas?.length == 0 ? 'Sin Resultados' : ofertas_filtradas[comercio.id].ofertas?.length }}</b>
                             </button>
                         </h2>
                         <div :id="'collapse' + index" class="accordion-collapse collapse" :data-bs-parent="'#collapse'+index">
