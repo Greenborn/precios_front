@@ -31,8 +31,8 @@
             </div>
         </div>
     
-        <div class="row border-top">
-            <div class="col pt-3">
+        <div class="row border-top align-items-center justify-content-center">
+            <div class="col-auto pt-3">
                 <Button label="Cancelar" icon="pi pi-times" iconPos="right" 
                         class="mr-1" @click="cancelar" />
                 <Button label="Filtrar" iconPos="right" 

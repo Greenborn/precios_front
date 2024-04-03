@@ -8,6 +8,13 @@
             </div>
         </div>
 
+        <div class="row align-items-center justify-content-center d-none d-sm-flex">
+            <div class="col-auto">
+                <Button label="Filtrar" iconPos="right" 
+                        @click="desplegar_filtros" />
+            </div>
+        </div>
+
         
         <div class="row align-items-center justify-content-center">
             <div class="col-12 col-md-10 col-lg-8 ">
