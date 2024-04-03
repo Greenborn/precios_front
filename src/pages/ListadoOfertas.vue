@@ -1,5 +1,5 @@
 <template>
-    <PublicTopBar />
+    <PublicTopBar @filtrar_evnt="desplegar_filtros"/>
 
     <div class="container-fluid" id="ofertas-cnt">
         <div class="row align-items-center justify-content-center">
@@ -14,7 +14,7 @@
 
                 <div class="accordion">
 
-                    <div class="accordion-item" v-for="(comercio, index) in listado_empresas" :key="comercio">
+                    <div class="accordion-item" v-for="(comercio, index) in comercios_filtrados" :key="comercio">
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" 
                                     :data-bs-target="'#collapse'+index" aria-expanded="false" :aria-controls="'collapse' + index">
@@ -65,7 +65,8 @@
     import PublicTopBar from "../components/publico/PublicTopBar.vue";
     
     import { formatMoney, fechaDateToString } from '../helpers/formatter'
-    import { busqueda_promociones } from '../api/public/publicEndpoints'
+    import { busqueda_promociones, comercios_promociones } from '../api/public/publicEndpoints'
+    import FormularioFiltroOferta from '../components/publico/FormularioFiltroOferta.vue'
     
     const storeApp = AppStore()
     const props = defineProps(['parametros'])
@@ -74,7 +75,55 @@
     const listado_por_comercio = ref({})
     const listado_empresas = ref([])
 
+    const listado_comercios = ref([])
+    
+    const comercios_filtrados = ref([])
+
+    function desplegar_filtros(){
+        let modal_form = storeApp.mostrar_modal(FormularioFiltroOferta, 'Filtrar por ',
+                            {
+                                'listado_comercios': listado_comercios.value,
+                                _callback_ok: async ( params_filtro ) => {
+                                    filtrar_ofertas( params_filtro )
+                                    storeApp.ocultar_modal( modal_form.code )
+                                }
+                            },
+                        )
+    }
+
+    function filtrar_ofertas( params_filtro ){
+        let keys = Object.keys( params_filtro.comercio )
+        let aux = []
+
+        for (let i=0; i < keys.length; i++){
+            if (params_filtro.comercio[keys[i]]){
+                
+                for (let j=0; j < listado_empresas.value.length; j++){
+                    if (keys[i] == listado_empresas.value[j].id){
+                        aux.push(listado_empresas.value[j])
+                        break
+                    }
+                }
+            }
+            
+        }
+
+        comercios_filtrados.value = aux
+    }
+
     onMounted(async ()=>{
+        storeApp.loading = true
+        let res_comercios = await comercios_promociones()
+        if (res_comercios){
+            storeApp.loading = false
+            if (!res_comercios.stat){
+                storeApp.mostrar_alerta( "No se pudieron obtener los comercios" )
+                return false
+            }
+            listado_comercios.value = res_comercios?.items
+            console.log(listado_comercios.value)
+        }
+
         storeApp.loading = true
         let res = await busqueda_promociones("cod_todas_las_ofertas")
         if (res){
@@ -97,6 +146,7 @@
                 }
                 listado_por_comercio.value[listado_promo_obtenido.value[i].branch_id].ofertas.push(listado_promo_obtenido.value[i])
             }
+            comercios_filtrados.value = listado_empresas.value
 
             for (let i=0; i < listado_empresas.value.length; i++){
                 listado_por_comercio.value[listado_empresas.value[i].id]?.ofertas.sort( (a, b) => (a.price > b.price) ? 1 : -1 )

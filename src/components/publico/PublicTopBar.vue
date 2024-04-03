@@ -19,6 +19,16 @@
         </div>
       </div>
 
+      <div class="d-flex d-md-none" v-if="storeApp.ruta_actual.path == '/ofertas'">
+        <div class="w-100" >
+          <div class="row align-items-center justify-content-center">
+            <div class="col-auto p-0">
+              <button class="btn btn-success" type="button" @click="filtrar">Filtrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>

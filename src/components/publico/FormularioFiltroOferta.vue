@@ -1,0 +1,67 @@
+<template>
+    <div class="w-100">
+        <div class="row p-2">
+            <div class="col-12 label-cont">
+                <label  for="nombre_prod"><b>Nombre</b></label>
+            </div>
+            <div class="col-12">
+                <input class="w-100" v-model="modelo.nombre_prod" />
+            </div>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-12 label-cont">
+                <label  for="comercio"><b>Comercio</b></label>
+            </div>
+            <div class="col">
+                <div class="row">
+
+                    <div class="col-12 col-md-6"
+                            v-for="(comercio, index) in parametros.listado_comercios" :key="index">
+                        <div class="form-check">
+                            <input class="form-check-input" v-model="modelo.comercio[comercio.branch_id]" type="checkbox" value="" 
+                                :id="'promoCheck' + index">
+                            <label class="form-check-label" :for="'promoCheck' + index">
+                                {{comercio.name}}
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    
+        <div class="row border-top">
+            <div class="col pt-3">
+                <Button label="Cancelar" icon="pi pi-times" iconPos="right" 
+                        class="mr-1" @click="cancelar" />
+                <Button label="Filtrar" iconPos="right" 
+                        @click="filtrar" />
+            </div>
+        </div>
+    
+    </div>
+</template>
+    
+<script setup>
+    import { ref } from 'vue'
+    import { AppStore } from '../../stores/app'
+    
+    const storeApp = AppStore()
+    const props = defineProps(['parametros'])
+    
+    const opc_comercios_s = ref([{
+        id: -1,
+        name: "Todas"
+    }])
+    opc_comercios_s.value.push( props.parametros.listado_comercios )
+    const modelo = ref({
+        comercio: {}, nombre_prod: null
+    })
+
+    function cancelar(){ storeApp.ocultar_modal( props.parametros._modal_cod ) }
+    
+    async function filtrar(){
+        props.parametros._callback_ok( modelo.value )
+    }
+</script>

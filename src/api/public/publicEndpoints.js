@@ -8,6 +8,10 @@ export function busqueda_promociones( termino ) {
   return request({ url: '/publico/busqueda/promociones?product_name='+encodeURI(termino), method: 'get' })
 }
 
+export function comercios_promociones() {
+  return request({ url: '/publico/busqueda/comercios_promociones', method: 'get' })
+}
+
 export function public_news() {
   return request({ url: '/public-news', method: 'get' })
 }
