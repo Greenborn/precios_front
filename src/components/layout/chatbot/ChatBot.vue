@@ -18,11 +18,9 @@ import ModalChat from './ModalChat.vue'
 
 
 const storeApp = AppStore()
-const isBalloonVisible = ref(false)
-const isChatModalOpen = ref(false)
 
 async function openChatModal() {
-  await storeApp.mostrar_modal(ModalChat, 'Chat', {}, {})
+  await storeApp.mostrar_modal(ModalChat, 'Tita', {}, {})
 }
 </script>
 

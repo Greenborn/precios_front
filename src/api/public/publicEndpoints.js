@@ -1,6 +1,10 @@
 import create from '../../helpers/request'
 const request = create(import.meta.env.VITE_APP_BACKEND_ADMIN, false)
 
+export function chat_bot_rsp( msg ) {
+  return request({ url: '/publico/chatbot/chat_bot_rsp?msg='+encodeURI(msg), method: 'get' })
+}
+
 export function busqueda( termino ) {
   return request({ url: '/publico/busqueda/precios?product_name='+encodeURI(termino), method: 'get' })
 }
